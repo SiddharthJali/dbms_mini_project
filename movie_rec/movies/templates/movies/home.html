@@ -1,0 +1,131 @@
+{% extends 'movies/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'movies/home_styles.css' %}">
+
+<style>
+    .card-scrollable {
+        display: flex;
+        overflow-x: hidden;
+        /* Hide the horizontal scrollbar */
+        width: 100%;
+        margin-bottom: 20px;
+        /* Add some space at the bottom of the cards */
+    }
+
+    .card-scrollable::-webkit-scrollbar {
+        display: none;
+        /* Hide the scrollbar for Webkit browsers */
+    }
+
+    .card-scrollable .card {
+        margin-right: 10px;
+    }
+</style>
+
+<!-- Trending Movies -->
+<div class="row mt-4">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <h2 class="d-inline-block mb-0">Trending Movies</h2>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary me-md-2" onclick="scrollMovies('trending', 'left')">←</button>
+            <button class="btn btn-primary" onclick="scrollMovies('trending', 'right')">→</button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card-scrollable" id="trending-movies">
+            {% for movie in trending_movies %}
+            <div class="card position-relative">
+                <img src="{{ movie.movie_poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                <div class="card-img-overlay d-flex flex-column justify-content-end">
+                    <h5 class="card-title mb-0">
+                        <a href="{% url 'movie_detail' movie_id=movie.movie_id %}"
+                            class="text-white text-decoration-none">
+                            {{ movie.title }}
+                        </a>
+                    </h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% if recommended_movies %}
+<!-- Recommended Movies -->
+<div class="row mt-4">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <h2 class="d-inline-block mb-0">Recommended Movies</h2>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary me-md-2" onclick="scrollMovies('recommended', 'left')">←</button>
+            <button class="btn btn-primary" onclick="scrollMovies('recommended', 'right')">→</button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card-scrollable" id="recommended-movies">
+            {% for movie in recommended_movies %}
+            <div class="card position-relative">
+                <img src="{{ movie.movie_poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                <div class="card-img-overlay d-flex flex-column justify-content-end">
+                    <h5 class="card-title mb-0">
+                        <a href="{% url 'movie_detail' movie_id=movie.movie_id %}"
+                            class="text-white text-decoration-none">
+                            {{ movie.title }}
+                        </a>
+                    </h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if watchlist_movies %}
+<!-- Watchlist Movies -->
+<div class="row mt-4">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <h2 class="d-inline-block mb-0">Watchlist Movies</h2>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary me-md-2" onclick="scrollMovies('watchlist', 'left')">←</button>
+            <button class="btn btn-primary" onclick="scrollMovies('watchlist', 'right')">→</button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card-scrollable" id="watchlist-movies">
+            {% for movie in watchlist_movies %}
+            <div class="card position-relative">
+                <img src="{{ movie.movie_poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                <div class="card-img-overlay d-flex flex-column justify-content-end">
+                    <h5 class="card-title mb-0">
+                        <a href="{% url 'movie_detail' movie_id=movie.movie_id %}"
+                            class="text-white text-decoration-none">
+                            {{ movie.title }}
+                        </a>
+                    </h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+<script>
+    function scrollMovies(category, direction) {
+        const container = document.getElementById(`${category}-movies`);
+        const scrollAmount = 300;
+
+        if (direction === 'left') {
+            container.scrollLeft -= scrollAmount;
+        } else if (direction === 'right') {
+            container.scrollLeft += scrollAmount;
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+# users/models.py
+from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    email = models.EmailField()
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    """
+    Signal handler to create a profile for a new user.
+    """
+    if created:
+        Profile.objects.create(user=instance, email=instance.email)
+
+
+@receiver(post_save, sender=User)
+def save_profile(sender, instance, **kwargs):
+    """
+    Signal handler to save the profile whenever the user is saved.
+    """
+    instance.profile.save()

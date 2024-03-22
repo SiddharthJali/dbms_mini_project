@@ -1,0 +1,65 @@
+<!-- movies/all_movies.html -->
+
+{% extends 'movies/base.html' %}
+
+{% block content %}
+<style>
+    .card {
+        flex: 0 0 auto;
+        width: 320px;
+        height: 200px;
+        margin: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        object-fit: cover;
+    }
+
+    .card img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+
+    .card:hover .card-img-overlay {
+        opacity: 1;
+    }
+
+    .card-img-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem;
+        color: white;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+</style>
+
+<div class="row mt-4" id="all-movies">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <h2 class="d-inline-block mb-0">All Movies</h2>
+    </div>
+    <div class="col-md-12">
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for movie in all_movies %}
+            <div class="col">
+                <div class="h-100">
+                    <div class="card position-relative">
+                        <img src="{{ movie.movie_poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                        <div class="card-img-overlay d-flex flex-column justify-content-end">
+                            <h5 class="card-title mb-0">
+                                <a href="{% url 'movie_detail' movie_id=movie.movie_id %}"
+                                    class="text-white text-decoration-none">
+                                    {{ movie.title }}
+                                </a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

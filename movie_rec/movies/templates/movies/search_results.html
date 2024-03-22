@@ -1,0 +1,30 @@
+<!-- movies/templates/movies/search_results.html -->
+{% extends 'movies/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'movies/search_styles.css' %}">
+<h2>Search Results for "{{ query }}"</h2>
+
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    {% if results %}
+    {% for movie in results %}
+    <div class="col">
+        <div class="card position-relative">
+            <img src="{{ movie.movie_poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+            <div class="card-img-overlay d-flex flex-column justify-content-end">
+                <h5 class="card-title mb-0">
+                    <a href="{% url 'movie_detail' movie_id=movie.movie_id %}" class="text-white text-decoration-none">
+                        {{ movie.title }}
+                    </a>
+                </h5>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
+</div>
+{% endblock %}

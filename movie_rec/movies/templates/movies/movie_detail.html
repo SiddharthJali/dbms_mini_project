@@ -1,0 +1,105 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'movies/bootstrap/css/bootstrap.min.css' %}">
+{% block content %}
+    {% if messages %}
+        <div class="alert alert-primary" role="alert" class="messages">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="card position-relative">
+        <img src="{{ movie.movie_poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+        <div class="glass-overlay"></div>
+        <div class="text-container">
+            <div class="d-flex justify-content-between align-items-end" style="width: 50%;">
+                <div class="text-white text-decoration-none">
+                    <div>
+                        <h1 class="display-1">{{ movie.title }}</h1>
+                        <br>
+                        <p class="card-text"><strong>Release Year:</strong> {{ movie.release_year }}</p>
+                        <p class="card-text"><strong>Genre:</strong> {{ movie.genre }}</p>
+                        <p class="card-text"><strong>Director:</strong> {{ movie.director }}</p>
+                        <p class="card-text"><strong>Cast:</strong> {{ movie.cast }}</p>
+                    </div>
+                    <br>
+                    <br>
+                    <form method="post" action="{% url 'submit_rating' movie_id=movie.movie_id %}" id="rating-form">
+                        {% csrf_token %}
+                        {% if user_rating %}
+                            <p>Your rating: {{ user_rating.rating }}
+                                <button type="button" class="btn btn-outline-warning" id="edit-rating-btn">Edit Rating</button>
+                            </p>
+                            <div class="form-group" id="rating-input" style="display: none;">
+                                <label for="rating">Update your rating (0-10):</label>
+                                <input type="number" class="form-control" name="rating" min="0" max="10" step="0.1"
+                                    value="{{ user_rating.rating }}">
+                                <br>
+                                <button type="submit" class="btn btn-primary" id="update-rating-btn"
+                                    style="display: none;">Update Rating</button>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                <label for="rating">Rate this movie (0-10):</label>
+                                <input type="number" class="form-control" name="rating" min="0" max="10" step="0.1">
+                                <br>
+                                <button type="submit" class="btn btn-primary">Rate</button>
+                            </div>
+                        {% endif %}
+                    </form>
+                    <form method="post" action="{% url 'movie_detail' movie_id=movie.movie_id %}">
+                        {% csrf_token %}
+                        {% if in_watchlist %}
+                            <br>
+                            <button type="submit" class="btn btn-danger" name="remove_watchlist">Remove from Watchlist</button>
+                        {% else %}
+                            <br>
+                            <button type="submit" class="btn btn-success" name="add_watchlist">Add to Watchlist</button>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var editRatingBtn = document.getElementById('edit-rating-btn');
+            var ratingInput = document.getElementById('rating-input');
+            var updateRatingBtn = document.getElementById('update-rating-btn');
+
+            editRatingBtn.addEventListener('click', function () {
+                ratingInput.style.display = 'block';
+                updateRatingBtn.style.display = 'block';
+            });
+        });
+    </script>
+    <style>
+        .glass-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+            z-index: 2;
+        }
+
+        .text-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            width: 50%;
+            box-sizing: border-box;
+            z-index: 3;
+        }
+
+        .text-container p,
+        .text-container h1 {
+            color: white;
+        }
+    </style>
+{% endblock %}
