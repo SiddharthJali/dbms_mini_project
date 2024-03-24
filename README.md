@@ -4,8 +4,6 @@
  it's a movie recommendation system, that provides optimal movie suggestions based on the user's preference and reviews/watchlist (interactions) relating to certain movies.
 ## Features
 + **User Authentication:** The system provides a login interface to authenticate users before accessing the database functionalities.
-+ **CRUD Operations:** Users can perform CRUD (Create, Read, Update, Delete) operations on criminal records stored in the database.
-+ **User Authentication:** The system provides a login interface to authenticate users before accessing the database functionalities.
 + **User Profiles:** Enable users to create profiles where they can customize their preferences, manage their watchlists, view their viewing history, and track their ratings and reviews
 + **CRUD Operations:** Users can perform CRUD (Create, Read, Update, Delete) operations on criminal records stored in the database.
 + **Watchlist Management:** Allow users to create and manage their watchlists where they can add movies they intend to watch later. Users can receive recommendations based on the contents of their watchlist.
